@@ -1,4 +1,4 @@
-import Cart from './cart';
+import Cart, { CartItem } from './cart';
 
 jest.mock('uuid', () => ({ v4: () => 'uuid' }));
 
@@ -16,11 +16,11 @@ describe('Cart', () => {
       expect(updatedCart).toMatchObject(
         new Cart({
           items: [
-            {
+            new CartItem({
               id: 'uuid',
               product: { id: 1, description: 'product', price: 1100 },
               cost: 1100,
-            },
+            }),
           ],
         }),
       );
@@ -31,27 +31,27 @@ describe('Cart', () => {
     it('removes one item from the cart', () => {
       const cart = new Cart({
         items: [
-          {
+          new CartItem({
             id: 'uuid-01',
             product: { id: 1, description: 'product', price: 1100 },
             cost: 1100,
-          },
-          {
+          }),
+          new CartItem({
             id: 'uuid-02',
             product: { id: 1, description: 'product', price: 1100 },
             cost: 1100,
-          },
+          }),
         ],
       });
 
       expect(cart.remove('uuid-02')).toMatchObject(
         new Cart({
           items: [
-            {
+            new CartItem({
               id: 'uuid-01',
               product: { id: 1, description: 'product', price: 1100 },
               cost: 1100,
-            },
+            }),
           ],
         }),
       );
@@ -62,16 +62,16 @@ describe('Cart', () => {
     it('calculates cart total', () => {
       const cart = new Cart({
         items: [
-          {
+          new CartItem({
             id: 'uuid-01',
             product: { id: 1, description: 'product', price: 1100 },
             cost: 1100,
-          },
-          {
+          }),
+          new CartItem({
             id: 'uuid-02',
             product: { id: 1, description: 'product', price: 1100 },
             cost: 1100,
-          },
+          }),
         ],
       });
 
@@ -81,21 +81,21 @@ describe('Cart', () => {
     it('makes lowest item free if buying 3 items', () => {
       const cart = new Cart({
         items: [
-          {
+          new CartItem({
             id: 'uuid-01',
             product: { id: 1, description: 'product', price: 1100 },
             cost: 1100,
-          },
-          {
+          }),
+          new CartItem({
             id: 'uuid-02',
             product: { id: 1, description: 'product', price: 1100 },
             cost: 1100,
-          },
-          {
+          }),
+          new CartItem({
             id: 'uuid-03',
             product: { id: 2, description: 'product-b', price: 1000 },
             cost: 1000,
-          },
+          }),
         ],
       });
 

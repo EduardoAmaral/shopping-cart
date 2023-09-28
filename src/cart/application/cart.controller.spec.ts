@@ -1,9 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CartController } from './cart.controller';
 import * as request from 'supertest';
+import Cart, { CartItem } from '../domain/cart';
 import { CartService } from '../domain/cart.service';
-import Cart from '../domain/cart';
+import { CartController } from './cart.controller';
 
 jest.mock('../domain/cart.service');
 
@@ -29,11 +29,11 @@ describe('CartController', () => {
     CartServiceMock.prototype.add.mockReturnValueOnce(
       new Cart({
         items: [
-          {
+          new CartItem({
             id: 'uuid',
             product: { id: 1, description: 'product', price: 1544 },
             cost: 1544,
-          },
+          }),
         ],
       }),
     );
@@ -72,11 +72,11 @@ describe('CartController', () => {
     CartServiceMock.prototype.close.mockReturnValueOnce(
       new Cart({
         items: [
-          {
+          new CartItem({
             id: 'uuid',
             product: { id: 1, description: 'product', price: 9999 },
             cost: 9999,
-          },
+          }),
         ],
         total: 9999,
       }),

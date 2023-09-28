@@ -1,7 +1,7 @@
 import BusinessException from '../../business.exception';
 import CartRepository from '../infrastructure/cart.repository';
 import ProductRepository from '../infrastructure/product.repository';
-import Cart from './cart';
+import Cart, { CartItem } from './cart';
 import { CartService } from './cart.service';
 
 jest.mock('uuid', () => ({ v4: () => 'uuid' }));
@@ -30,11 +30,11 @@ describe('CartService', () => {
       expect(cartRepository.save).toHaveBeenCalledWith(
         new Cart({
           items: [
-            {
+            new CartItem({
               id: 'uuid',
               product: { id: 1, description: 'T-shirt', price: 1299 },
               cost: 1299,
-            },
+            }),
           ],
         }),
       );

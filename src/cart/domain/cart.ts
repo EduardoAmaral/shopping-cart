@@ -1,17 +1,27 @@
-import Product from './product';
 import { v4 as uuidv4 } from 'uuid';
+import Product from './product';
 
-export interface CartItem {
-  id: string;
-  product: Product;
-  cost: number;
+export class CartItem {
+  readonly id: string;
+  readonly product: Product;
+  readonly cost: number;
+
+  constructor(params: { id?: string; product: Product; cost: number }) {
+    this.id = params.id || uuidv4();
+    this.product = params.product;
+    this.cost = params.cost;
+  }
+
+  updateCost(cost: number): CartItem {
+    return new CartItem({ ...this, cost });
+  }
 }
 
 export default class Cart {
   private static readonly TAKE_FREE_ITEM_QUANTITY = 3;
 
-  private readonly items: CartItem[];
-  private readonly total: number;
+  readonly items: CartItem[];
+  readonly total: number;
 
   constructor(params?: { items: CartItem[]; total?: number }) {
     this.items = params?.items || [];
@@ -20,10 +30,7 @@ export default class Cart {
 
   add(product: Product): Cart {
     return new Cart({
-      items: [
-        ...this.items,
-        { id: uuidv4(), product, cost: product.price },
-      ],
+      items: [...this.items, new CartItem({ product, cost: product.price })],
     });
   }
 
@@ -43,7 +50,7 @@ export default class Cart {
       .map((item) => {
         if (takeFreeQuantity) {
           takeFreeQuantity--;
-          return { ...item, cost: 0 };
+          return item.updateCost(0);
         }
 
         return item;
